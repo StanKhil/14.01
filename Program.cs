@@ -1,21 +1,38 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 
 namespace _14._01
 {
     internal class Program
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern int MessageBox(IntPtr hWnd, String text, String caption, int type);
+
 
         static void Main()
         {
-            MessageBox(IntPtr.Zero, "Мене звати Хіль Станіслав", "Name", 0);
-            MessageBox(IntPtr.Zero, "Я навчаюся программування", "Course", 0);
-            MessageBox(IntPtr.Zero, "Мені 17 років", "Age", 0);
-            MessageBox(IntPtr.Zero, "Мій номер телефону: 380 99 999 99 99", "Phone", 0);
-            
+
+            ProcessStartInfo startInfo = new ProcessStartInfo()
+            {
+                FileName = "notepad.exe",
+            };
+            Process process = new Process()
+            {
+                StartInfo = startInfo,
+            };
+            process.Start();
+            Console.WriteLine("Select mode:\n(1) wait until the end and print exit code\n(2)Kill child process");
+            int mode = int.Parse(Console.ReadLine());
+            if (mode == 1)
+            {
+                Console.WriteLine("Waiting for exit");
+                process.WaitForExit();
+                Console.WriteLine("Child process exit code: " + process.ExitCode);
+            }
+            else
+            {
+                Console.WriteLine("Killing child process");
+                process.Kill();
+            }
         }
     }
 }
